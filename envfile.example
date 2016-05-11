@@ -1,0 +1,9 @@
+GITHUB_USERNAME="username"
+TWITTER_USERNAME="username(no @ symbol)"
+
+GITHUB_API_TOKEN="tokenfromgithub"
+
+FULL_NAME="Your Name"
+EMAIL="exzmple@example.com"
+JOB_TITLE="Professional Tester"
+RESUME_LINK="LinktoResume"
