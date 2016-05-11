@@ -12,8 +12,16 @@ logging.basicConfig(filename="web.log", level=logging.INFO)
 app = Flask(__name__)
 cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
 
-GITHUB_API_TOKEN = getenv("GITHUB_API_TOKEN")
 GITHUB_USERNAME  = getenv("GITHUB_USERNAME")
+TWITTER_USERNAME = getenv("TWITTER_USERNAME")
+
+GITHUB_API_TOKEN = getenv("GITHUB_API_TOKEN")
+
+FULL_NAME = getenv("FULL_NAME")
+JOB_TITLE = getenv("JOB_TITLE")
+EMAIL = getenv("EMAIL")
+RESUME_LINK = getenv("RESUME_LINK")
+
 
 headers = {
         "Authorization": "token " + GITHUB_API_TOKEN,
@@ -28,22 +36,30 @@ def index():
         (owner, repos) = get_repo_info()
         cache.set("owner", owner)
         cache.set("repos", repos)
-
-    return render_template("index.html", repos=repos, owner=owner)
+    return render_template("index.html", 
+            repos=repos, 
+            owner=owner, 
+            email=EMAIL, 
+            job_title=JOB_TITLE,
+            resume_link=RESUME_LINK,
+            full_name=FULL_NAME,
+            twitter=TWITTER_USERNAME)
 
 def update_cache():
-    print("updating cache")
+    app.logger.info("updating cache")
     (owner, repos) = get_repo_info()
     cache.set("owner", owner)
     cache.set("repos", repos)
-    print("cache successfully updated")
+    app.logger.info("cache successfully updated")
     # Update every 10800 seconds or 3 hours
     Timer(10800, update_cache).start()
 
 def get_repo_stats(repo):
     r = requests.get("https://api.github.com/repos/" + GITHUB_USERNAME + "/" + repo['name'] + "/stats/commit_activity", headers=headers)
     if r.status_code >= 300:
-        print("Error getting repo stats: ", repo.name, r.text)
+        app.logger.error("Error getting repo stats: ", repo.name, r.text)
+        return repo
+
     total_commits = 0
 
     for stat in r.json():
@@ -63,6 +79,6 @@ def get_repo_info():
     except:
         print("Error parsing json: ", r.text)
         return "Error parsing json"
-    return (repos[0]['owner'], sorted(map(get_repo_stats, repos), key=lambda r: r['total_commits'], reverse=True))
+    return (repos[0]['owner'], sorted(map(get_repo_stats, repos), key=lambda r: r['total_commits'], reverse=True)[:4])
 
 update_cache()
