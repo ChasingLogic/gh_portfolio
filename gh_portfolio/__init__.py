@@ -14,6 +14,7 @@ cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_tim
 
 GITHUB_API_TOKEN = getenv("GITHUB_API_TOKEN")
 GITHUB_USERNAME  = getenv("GITHUB_USERNAME")
+GITHUB_FULL_NAME = getenv("GITHUB_FULL_NAME")
 
 headers = {
         "Authorization": "token " + GITHUB_API_TOKEN,
