@@ -1,0 +1,16 @@
+<h1>Hello world!</h1>
+<div class="profile-pic">
+	<h2>{{ owner.login }}</h2>
+	<img src={{ owner.avatar_url }} alt="A handsome face!">
+</div>
+<div class="container repo-card-holder">
+{% for repo in repos %}
+	{% if repo.private == false and repo.name != "dotfiles" %}
+	<div class="repo-card">
+		<h4><a href={{ repo.html_url }} >{{ repo.name }}</a></h4>
+		<p>{{ repo.description }}</p>
+		<p>{{ repo.language }}</p>
+		<p>Commits: {{ repo.total_commits }}</p>
+	</div>
+	{% endif %}
+{% endfor %}	
