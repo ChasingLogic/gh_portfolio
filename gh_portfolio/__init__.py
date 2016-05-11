@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from os import getenv
 from functools import reduce
+from threading import Timer
 from werkzeug.contrib.cache import RedisCache
 
 import requests
@@ -10,7 +11,6 @@ logging.basicConfig(filename="web.log", level=logging.INFO)
 
 app = Flask(__name__)
 cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
-
 
 GITHUB_API_TOKEN = getenv("GITHUB_API_TOKEN")
 GITHUB_USERNAME  = getenv("GITHUB_USERNAME")
@@ -22,12 +22,23 @@ headers = {
 
 @app.route("/")
 def index():
-    stats = get_gh_stats()
-    (owner, repos) = get_repo_info()
+    owner = cache.get("owner")
+    repos = cache.get("repos")
+    if repos == None or owner == None:
+        (owner, repos) = get_repo_info()
+        cache.set("owner", owner)
+        cache.set("repos", repos)
+
     return render_template("index.html", repos=repos, owner=owner)
 
-def get_gh_stats():
-    return ""
+def update_cache():
+    print("updating cache")
+    (owner, repos) = get_repo_info()
+    cache.set("owner", owner)
+    cache.set("repos", repos)
+    print("cache successfully updated")
+    # Update every 10800 seconds or 3 hours
+    Timer(10800, update_cache).start()
 
 def get_repo_stats(repo):
     r = requests.get("https://api.github.com/repos/" + GITHUB_USERNAME + "/" + repo['name'] + "/stats/commit_activity", headers=headers)
@@ -52,4 +63,7 @@ def get_repo_info():
     except:
         print("Error parsing json: ", r.text)
         return "Error parsing json"
+    repos[0]['owner']['full_name'] = GITHUB_FULL_NAME
     return (repos[0]['owner'], sorted(map(get_repo_stats, repos), key=lambda r: r['total_commits'], reverse=True))
+
+update_cache()
