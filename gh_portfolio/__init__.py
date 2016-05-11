@@ -10,7 +10,7 @@ import logging
 logging.basicConfig(filename="web.log", level=logging.INFO)
 
 app = Flask(__name__)
-cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
+cache = RedisCache(host='redis', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
 
 GITHUB_USERNAME  = getenv("GITHUB_USERNAME")
 TWITTER_USERNAME = getenv("TWITTER_USERNAME")
