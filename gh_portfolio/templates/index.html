@@ -2,46 +2,49 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>ChasingLogic's (Mathew Robinson) Portfolio</title>
+	<title>{{ full_name}}'s Portfolio</title>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link href="/static/index.css" rel="stylesheet">
 </head>
 
-<div class="container">
-	<div class="row">
-		<div class="sidebar col-md-4">
-			<a href="https://github.com/chasinglogic">
-				<img class="center-block img-circle profile-pic" src={{ owner.avatar_url }} alt="A handsome face!">
-			</a>
-			<div class="center-block text-center">
-				<h3>Mathew Robinson</h3>
-				<h4><a href="https://twitter.com/chasinglogic">@chasinglogic</a></h4>
-				<h4><a href="mailto:mathew.robinson3114@gmail.com">mathew.robinson3114@gmail.com</a></h4>
+<div class="page container">
+	<div class="center-block container wrapper">
+		<div class="center-block shadow contact-card">
+			<div class="row">
+				<div class="col-md-6">
+					<a href="https://github.com/{{ owner.name }}">
+						<img class="center-block img-circle profile-pic" src={{ owner.avatar_url }} alt="A handsome face!">
+					</a>
+				</div>
+				<div class="col-md-6 text-left">
+					<h3>{{ full_name }}</h3>
+					<h4>{{ job_title }}</h4>
+					<h4><a href="https://twitter.com/chasinglogic">@chasinglogic</a></h4>
+					<h4><a href={{ resume_link }}>resume</a>
+						- <a href="https://github.com/{{ owner.name }}">portfolio</a>
+						- <a href="mailto:{{ email }}">email</a></h4>
+				</div>
 			</div>
 		</div>
-
-		<div class="col-md-8">
-			<h3 class="text-center" ><strong>Open Source Software</strong></h3>
-			<div class="repos">
+		<div class="shadow contact-card center-block">
+			<h3 class="text-center" ><strong>Current Projects</strong></h3>
+			<ul class="list-group">
 				{% for repo in repos %}
 				{% if repo.private == false and repo.name != "dotfiles" %}
-				<blockquote class="repo-card">
+				<li class="list-group-item">
 					<dl class="dl-horizontal">
-						<dt>Name</dt>
-						<dd><a href={{ repo.html_url }} >{{ repo.name }}</a></dd>
+						<dt>Name</dt>	
+						<dd><a href={{ repo.html_url }} >{{ repo.name }}</a><span class="pull-right badge">{{ repo.total_commits }}</span></dd>
 						<dt>Description</dt>
 						<dd>{{ repo.description }}</dd>
 						<dt>Language</dt>
 						<dd>{{ repo.language }}</dd>
-						<dt>Commits</dt>
-						<dd>{{ repo.total_commits }}</dd>
 					</dl>
-				</blockquote>
+				</li>
 				{% endif %}
 				{% endfor %}
-			</div>
+			</ul>
 		</div>
 	</div>
-</div>
 </div>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
