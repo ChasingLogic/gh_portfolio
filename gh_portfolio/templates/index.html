@@ -7,37 +7,44 @@
 	<link href="/static/index.css" rel="stylesheet">
 </head>
 
-<div class="page">
-	<h1>Hello world! This is my portfolio!</h1>
-
-	<div class="pic-box">
-		<a href="https://github.com/chasinglogic">
-			<img class="img-circle profile-pic" src={{ owner.avatar_url }} alt="A handsome face!">
+<div class="container-fluid">
+	<div class="row">
+		<a class="col-md-12" href="https://github.com/chasinglogic">
+			<img class="img-circle profile-pic center-block" src={{ owner.avatar_url }} alt="A handsome face!">
 		</a>
 	</div>
 
-	<div class="name-box">
-		<h3 class="pull-left">{{ owner.login }}</h3>
-		<h3 class="pull-right">{{ owner.full_name }}</h3>
+	<div class="row">
+		<h3 class="large-name col-md-6">{{ owner.login }}</h3> 
+		<h3 id="full-name" class="large-name col-md-6">{{ owner.full_name }}</h3>
 	</div>
 
-	<div class="repo-card-holder">
-	{% for repo in repos %}
-		{% if repo.private == false and repo.name != "dotfiles" %}
-		<blockquote class="repo-card">
-			<dl class="dl-horizontal">
-				<dt>Name</dt>
-				<dd><a href={{ repo.html_url }} >{{ repo.name }}</a></dd>
-				<dt>Description</dt>
-				<dd>{{ repo.description }}</dd>
-				<dt>Language</dt>
-				<dd>{{ repo.language }}</dd>
-				<dt>Commits</dt>
-				<dd>{{ repo.total_commits }}</dd>
-			</dl>
-		</blockquote>
-		{% endif %}
-	{% endfor %}	
+	<div class="row">
+		<div class="col-md-6">
+			<h3><strong>Open Source Software</strong></h3>
+			<div class="repos">
+				{% for repo in repos %}
+					{% if repo.private == false and repo.name != "dotfiles" %}
+					<blockquote class="repo-card">
+						<dl class="dl-horizontal">
+							<dt>Name</dt>
+							<dd><a href={{ repo.html_url }} >{{ repo.name }}</a></dd>
+							<dt>Description</dt>
+							<dd>{{ repo.description }}</dd>
+							<dt>Language</dt>
+							<dd>{{ repo.language }}</dd>
+							<dt>Commits</dt>
+							<dd>{{ repo.total_commits }}</dd>
+						</dl>
+					</blockquote>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-md-6">
+			tweets here
+		</div>
+	</div>
 </div>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
