@@ -6,7 +6,7 @@ from werkzeug.contrib.cache import RedisCache
 import requests
 import logging
 
-logging.basicConfig(filename="gh_portfolio.log", level=logging.INFO)
+logging.basicConfig(filename="web.log", level=logging.INFO)
 
 app = Flask(__name__)
 cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
