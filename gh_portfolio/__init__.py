@@ -14,7 +14,6 @@ cache = RedisCache(host='localhost', port=6379, password=None, db=0, default_tim
 
 GITHUB_API_TOKEN = getenv("GITHUB_API_TOKEN")
 GITHUB_USERNAME  = getenv("GITHUB_USERNAME")
-GITHUB_FULL_NAME = getenv("GITHUB_FULL_NAME")
 
 headers = {
         "Authorization": "token " + GITHUB_API_TOKEN,
@@ -64,7 +63,6 @@ def get_repo_info():
     except:
         print("Error parsing json: ", r.text)
         return "Error parsing json"
-    repos[0]['owner']['full_name'] = GITHUB_FULL_NAME
     return (repos[0]['owner'], sorted(map(get_repo_stats, repos), key=lambda r: r['total_commits'], reverse=True))
 
 update_cache()
