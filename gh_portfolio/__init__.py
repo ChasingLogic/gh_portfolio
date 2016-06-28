@@ -69,7 +69,7 @@ def get_repo_stats(repo):
     return repo
 
 def get_repo_info():
-    r = requests.get("https://api.github.com/users/" + GITHUB_USERNAME + "/repos", headers=headers)
+    r = requests.get("https://api.github.com/users/" + GITHUB_USERNAME + "/repos?sort=updated", headers=headers)
     print("https://api.github.com/users/" + GITHUB_USERNAME + "/repos")
     if r.status_code >= 300:
         print("Failed to get repos: ", r.text)
@@ -79,6 +79,7 @@ def get_repo_info():
     except:
         print("Error parsing json: ", r.text)
         return "Error parsing json"
-    return (repos[0]['owner'], sorted(map(get_repo_stats, repos), key=lambda r: r['total_commits'], reverse=True)[:4])
+    
+    return (repos[0]['owner'], [get_repo_stats(r) for r in repos][:4])
 
 update_cache()
