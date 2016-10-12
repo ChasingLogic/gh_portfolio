@@ -1,50 +1,53 @@
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>{{ full_name}}'s Portfolio</title>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<link href="/static/index.css" rel="stylesheet">
+  <title>{{ full_name}}'s Portfolio</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="/static/index.css" rel="stylesheet">
 </head>
 
 <div class="page container">
-	<div class="center-block container wrapper">
-		<div class="center-block shadow contact-card">
-			<div class="row">
-				<div class="col-md-6">
-					<a href="https://github.com/{{ owner.name }}">
-						<img class="center-block img-circle profile-pic" src={{ owner.avatar_url }} alt="A handsome face!">
-					</a>
-				</div>
-				<div class="col-md-6 text-left">
-					<h3>{{ full_name }}</h3>
-					<h4>{{ job_title }}</h4>
-					<h4><a href="https://twitter.com/{{ twitter }}">@{{ twitter }}</a></h4>
-					<h4><a href={{ resume_link }}>resume</a>
-						- <a href="https://github.com/{{ owner.name }}">portfolio</a>
-						- <a href="mailto:{{ email }}">email</a></h4>
-				</div>
-			</div>
-		</div>
-		<div class="shadow contact-card center-block">
-			<h3 class="text-center" ><strong>Current Projects</strong></h3>
-			<ul class="list-group">
-				{% for repo in repos %}
-				{% if repo.private == false and repo.name != "dotfiles" %}
-				<li class="list-group-item">
-					<dl class="dl-horizontal">
-						<dt>Name</dt>	
-						<dd><a href={{ repo.html_url }} >{{ repo.name }}</a><span class="pull-right badge">{{ repo.total_commits }}</span></dd>
-						<dt>Description</dt>
-						<dd>{{ repo.description }}</dd>
-						<dt>Language</dt>
-						<dd>{{ repo.language }}</dd>
-					</dl>
-				</li>
-				{% endif %}
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
+  <div class="center-block container wrapper">
+    <div class="center-block shadow contact-card">
+      <div class="row">
+        <div class="col-md-6">
+          <a href="https://github.com/{{ owner.name }}">
+            <img class="center-block img-circle profile-pic" src={{ owner.avatar_url }} alt="A handsome face!">
+          </a>
+        </div>
+        <div class="col-md-6 text-left">
+          <h3>{{ full_name }}</h3>
+          <h4>{{ job_title }}</h4>
+          <h4><a href="https://twitter.com/{{ twitter }}">@{{ twitter }}</a></h4>
+          <h4><a href={{ resume_link }}>resume</a>
+            - <a href="https://github.com/{{ owner.name }}">portfolio</a>
+            - <a href="mailto:{{ email }}">email</a></h4>
+        </div>
+      </div>
+    </div>
+    <div class="shadow contact-card center-block">
+      <h3 class="text-center" ><strong>Recent Notable Things</strong></h3>
+      <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I Don&#39;t Git It by Mathew Robinson at Ohio Linuxfest 2016 <a href="https://t.co/W3oNs8eaU4">https://t.co/W3oNs8eaU4</a><br><br>Someone was awesome enough to record my talk!</p>&mdash; Mathew Robinson (@chasinglogic) <a href="https://twitter.com/chasinglogic/status/785655061200277504">October 11, 2016</a></blockquote>
+      <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <div class="shadow contact-card center-block">
+      <h3 class="text-center" ><strong>Most Active Projects</strong></h3>
+      <ul class="list-group">
+        {% for repo in repos %}
+          <li class="list-group-item">
+            <dl class="dl-horizontal">
+              <dt>Name</dt>	
+              <dd><a href={{ repo.html_url }} >{{ repo.name }}</a><span class="pull-right badge">{{ repo.total_commits }}</span></dd>
+              <dt>Description</dt>
+              <dd>{{ repo.description }}</dd>
+              <dt>Language</dt>
+              <dd>{{ repo.language }}</dd>
+            </dl>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </div>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
