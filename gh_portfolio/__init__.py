@@ -7,8 +7,6 @@ from werkzeug.contrib.cache import RedisCache
 import requests
 import logging
 
-logging.basicConfig(filename="web.log", level=logging.INFO)
-
 app = Flask(__name__)
 cache = RedisCache(host='redis', port=6379, password=None, db=0, default_timeout=300, key_prefix=None)
 
@@ -46,18 +44,21 @@ def index():
             twitter=TWITTER_USERNAME)
 
 def update_cache():
-    app.logger.info("updating cache")
+    print("updating cache")
     (owner, repos) = get_repo_info()
-    cache.set("owner", owner)
+    print("repos", [ r.get("name") for r in repos])
     cache.set("repos", repos)
-    app.logger.info("cache successfully updated")
+    cache.set("owner", owner)
+    print("cache successfully updated")
     # Update every 10800 seconds or 3 hours
     Timer(10800, update_cache).start()
 
 def get_repo_stats(repo):
-    r = requests.get("https://api.github.com/repos/" + GITHUB_USERNAME + "/" + repo['name'] + "/stats/commit_activity", headers=headers)
+    r = requests.get("https://api.github.com/repos/" + GITHUB_USERNAME + 
+                     "/" + repo['name'] + "/stats/commit_activity", 
+                     headers=headers)
     if r.status_code >= 300:
-        app.logger.error("Error getting repo stats: ", repo.name, r.text)
+        print("Error getting repo stats: ", repo.name, r.text)
         return repo
 
     total_commits = 0
@@ -69,8 +70,8 @@ def get_repo_stats(repo):
     return repo
 
 def get_repo_info():
-    r = requests.get("https://api.github.com/users/" + GITHUB_USERNAME + "/repos?sort=updated", headers=headers)
-    print("https://api.github.com/users/" + GITHUB_USERNAME + "/repos")
+    r = requests.get("https://api.github.com/users/" + GITHUB_USERNAME +
+                     "/repos", headers=headers)
     if r.status_code >= 300:
         print("Failed to get repos: ", r.text)
         return "Failed to get repos"
@@ -80,6 +81,12 @@ def get_repo_info():
         print("Error parsing json: ", r.text)
         return "Error parsing json"
     
-    return (repos[0]['owner'], [get_repo_stats(r) for r in repos][:4])
+    repo_stats = sorted([get_repo_stats(r) for r in repos], 
+                   key=lambda r: r["total_commits"], reverse=True)
+
+    print([ r["name"] for r in repo_stats ])
+    return (repo_stats[0]["owner"], 
+            [ r for r in repo_stats if r["private"] == False and r["name"] not
+             in ["dotfiles", "penguinpunch.com"]][:4])
 
 update_cache()
