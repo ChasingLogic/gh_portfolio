@@ -2,6 +2,11 @@ body {
     background-color: #87CEFA;
 }
 
+iframe {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .profile-pic {
     max-width: 155px;
     max-height: 155px;
